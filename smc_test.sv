@@ -21,7 +21,7 @@ class smc_test extends uvm_test;
 	task run_phase(uvm_phase phase);
 		phase.raise_objection(this, "Sequence starts.");
 			seq.start(env.agent.sqr);
-			#10000;
+			#100000;
 		phase.drop_objection(this, "Sequence ends.");
 	endtask : run_phase
 

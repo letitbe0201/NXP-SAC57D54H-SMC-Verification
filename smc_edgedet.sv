@@ -24,25 +24,29 @@ class smc_edgedet extends uvm_scoreboard;
 		forever begin
 			edfifo.get(o_msg);
 			for (int i=0; i<12; i+=1) begin
-				if (o_msg.MNM[i] == old_mnm[i])
+				if (((o_msg.MNM[i]==1) && (old_mnm[i]==1)) || ((o_msg.MNM[i]==0) && (old_mnm[i]==0)))
 					r_msg.rf_mnm[i] = Stay;
 				else if (o_msg.MNM[i]==1 && old_mnm[i]==0)
 					r_msg.rf_mnm[i] = Rising;
 				else if (o_msg.MNM[i]==0 && old_mnm[i]==1)
 					r_msg.rf_mnm[i] = Falling;
+				else
+					r_msg.rf_mnm[i] = x_z;
 			
-				if (o_msg.MNP[i] == old_mnp[i])
+				if (((o_msg.MNP[i]==1) && (old_mnp[i]==1)) || ((o_msg.MNP[i]==0) && (old_mnp[i]==0)))
 					r_msg.rf_mnp[i] = Stay;
 				else if (o_msg.MNP[i]==1 && old_mnp[i]==0)
 					r_msg.rf_mnp[i] = Rising;
 				else if (o_msg.MNP[i]==0 && old_mnp[i]==1)
 					r_msg.rf_mnp[i] = Falling;
+				else
+					r_msg.rf_mnp[i] = x_z;
 			end
 			r_msg.timestamp = $realtime;
 			ed_port.write(r_msg);
-			`uvm_info("EDGE DET", $sformatf("MNM[1] %s @ %0t", r_msg.rf_mnm[1], r_msg.timestamp), UVM_LOW)
-			`uvm_info("EDGE DET", $sformatf("MNP[0] %s @ %0t", r_msg.rf_mnp[0], r_msg.timestamp), UVM_LOW)
-			//`uvm_info("EDGE DET", $sformatf("%b %b", o_msg.MNP[0], old_mnp[0]), UVM_LOW)
+			//`uvm_info("EDGE DET", $sformatf("MNM[1] %s @ %0t", r_msg.rf_mnm[1], r_msg.timestamp), UVM_LOW)
+			//`uvm_info("EDGE DET", $sformatf("MNP[0] %s @ %0t", r_msg.rf_mnp[0], r_msg.timestamp), UVM_LOW)
+			`uvm_info("EDGE DET", $sformatf("%b %b", o_msg.MNP[0], old_mnp[0]), UVM_LOW)
 			old_mnm = o_msg.MNM;
 			old_mnp = o_msg.MNP;
 		end

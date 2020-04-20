@@ -1,6 +1,7 @@
 `include "uvm_macros.svh"
 `include "smc_intf.sv"
 `include "smc_message.sv"
+`include "smc_period.sv"
 `include "smc_commanddet.sv"
 `include "smc_edgedet.sv"
 `include "smc_sequence.sv"

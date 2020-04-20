@@ -11,18 +11,17 @@ module top();
 	initial begin
 		i.QCLK = 0;
 		#5;
-		repeat (10000) begin
+		repeat (100) begin
 			#5 i.QCLK = 1;
 			#5 i.QCLK = 0;
 		end
-		$display("\n\nClock runs out.\n\n");
-		$finish;
 	end
 
 	initial begin
 		uvm_config_db #(virtual smc_intf)::set(null, "*", "intf", i);
 		run_test("smc_test");
-		#100000
+		#10000000
+		$display("\n\nClock runs out.\n\n");
 		$finish;
 	end
 
