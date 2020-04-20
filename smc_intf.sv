@@ -12,5 +12,6 @@ interface smc_intf();
 
 	modport drv_intf (input QCLK, output QRESET, output QWRITE, output QSEL, output QADDR, output QDATAIN);
 	modport monout_intf (input QCLK, input QDATAOUT, input MNM, input MNP);
+	modport monin_intf(input QCLK, input QRESET, input QWRITE, input QSEL, input QADDR, input QDATAIN);
 
 endinterface : smc_intf

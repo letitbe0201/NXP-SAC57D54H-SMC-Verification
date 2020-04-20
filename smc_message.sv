@@ -51,3 +51,18 @@ class rf_msg;
 	endfunction : new
 
 endclass : rf_msg
+
+typedef enum {mcper, mcctl1, mcctl0, mccc3, mccc2, mccc1, mccc0, mccc7, mccc6, mccc5, mccc4, mccc11, mccc10, mccc9, mccc8, mcdc1, mcdc0, mcdc3, mcdc2, mcdc5, mcdc4, mcdc7, mcdc6, mcdc9, mcdc8, mcdc11, mcdc10, empty} regsss;
+class command_msg;
+
+	regsss r;
+	logic [15:0] data;
+	realtime timestamp;
+
+	function new(regsss R, logic D);
+		r = R;
+		data = D;
+		this.timestamp = $realtime;
+	endfunction : new
+
+endclass : command_msg;

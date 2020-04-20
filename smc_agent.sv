@@ -28,14 +28,14 @@ class smc_agent extends uvm_agent;
 			`uvm_fatal("SMC AGENT", "Something wrong in intf config.")
 		uvm_config_db #(virtual smc_intf)::set(this, "drv", "intf", intf);
 		uvm_config_db #(virtual smc_intf)::set(this, "mo", "intf", intf);
+		uvm_config_db #(virtual smc_intf)::set(this, "mi", "intf", intf);
 
 	endfunction : build_phase
 
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		drv.seq_item_port.connect(sqr.seq_item_export);
-		//mi.monin_ag.connect(ag_in);
-		drv.drv_monin.connect(mi.drv_monin);
+		mi.monin_ag.connect(ag_in);
 		mo.monout_ag.connect(ag_out);
 	endfunction : connect_phase
 

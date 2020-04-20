@@ -39,22 +39,22 @@ always @(posedge QCLK) begin
 
 	if (count==0) begin
 		out_MNM[1] = 1; 
-		out_MNP[0] = 0;
+		out_MNP[0] = 1;
 	end
 	else if (count == 1) begin
-		out_MNM[1] = 1; 
+		out_MNM[1] = 0; 
 		out_MNP[0] = 1;	
 	end
 	else if (count == 2) begin
-		out_MNM[1] = 1; 
-		out_MNP[0] = 0;	
+		out_MNM[1] = 0; 
+		out_MNP[0] = 1;	
 	end	
 	else if (count == 3) begin
-		out_MNM[1] = 1; 
+		out_MNM[1] = 0; 
 		out_MNP[0] = 0;	
 	end	
 	else if (count == 4) begin
-		out_MNM[1] = 0; 
+		out_MNM[1] = 1; 
 		out_MNP[0] = 1;	
 	end	
 	else if (count == 5) begin
@@ -66,19 +66,9 @@ always @(posedge QCLK) begin
 		out_MNP[0] = 1;	
 	end	
 	else if (count == 7) begin
-		out_MNM[1] = 1; 
+		out_MNM[1] = 0; 
 		out_MNP[0] = 0;
-	end
-	else if (count == 8) begin
-		out_MNM[1] = 1; 
-		out_MNP[0] = 1;
-	end
-	else if (count == 9) begin
-		out_MNM[1] = 1; 
-		out_MNP[0] = 0;
-	end
-	else if (count == 10) begin
-		count = 0;
+		count = -1;
 	end
 
 	count += 1;
