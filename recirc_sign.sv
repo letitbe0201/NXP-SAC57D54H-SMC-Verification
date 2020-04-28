@@ -1,8 +1,10 @@
-class smc_edgedet extends uvm_scoreboard;
+class recirc_sign extends uvm_scoreboard;
 
-	`uvm_component_utils(smc_edgedet)
-	uvm_tlm_analysis_fifo #(out_msg) edfifo;
-	uvm_analysis_port #(rf_msg) ed_port;
+	`uvm_component_utils(recirc_sign)
+	uvm_tlm_analysis_fifo #(out_msg) rs_outfifo;
+	uvm_tlm_analysis_fifo #(in_msg) rs_infifo;
+	uvm_
+	uvm_analysis_port #(recirc_sign_msg) rs_port;
 
 	out_msg o_msg;
 	logic [11:0] old_mnm, old_mnp;
@@ -46,10 +48,5 @@ class smc_edgedet extends uvm_scoreboard;
 			ed_port.write(r_msg);
 			//`uvm_info("EDGE DET", $sformatf("MNM[1] %s @ %0t", r_msg.rf_mnm[1], r_msg.timestamp), UVM_LOW)
 			//`uvm_info("EDGE DET", $sformatf("MNP[0] %s @ %0t", r_msg.rf_mnp[0], r_msg.timestamp), UVM_LOW)
-			//`uvm_info("EDGE DET", $sformatf("%b %b", o_msg.MNP[0], old_mnp[0]), UVM_LOW)
+			`uvm_info("EDGE DET", $sformatf("%b %b", o_msg.MNP[0], old_mnp[0]), UVM_LOW)
 			old_mnm = o_msg.MNM;
-			old_mnp = o_msg.MNP;
-		end
-	endtask : run_phase
-
-endclass : smc_edgedet

@@ -7,7 +7,7 @@ class smc_period extends uvm_scoreboard;
 	period_msg p_msg;
 	rf_msg r_msg;
 
-	function new(string name="smc_edgedet", uvm_component par=null);
+	function new(string name="smc_period", uvm_component par=null);
 		super.new(name, par);
 	endfunction : new
 
@@ -51,7 +51,7 @@ class smc_period extends uvm_scoreboard;
 			p_msg.timestamp = $realtime;
 			p_port.write(p_msg);
 			//`uvm_info("PERIOD", $sformatf("mnm1 p:%d c:%d  %0t", p_msg.mnm_per[1], p_msg.mnm_count[1], p_msg.timestamp), UVM_LOW)
-			`uvm_info("PERIOD", $sformatf("mnp0 p:%d c:%d  %0t", p_msg.mnp_per[0], p_msg.mnp_count[0], p_msg.timestamp), UVM_LOW)
+			//`uvm_info("PERIOD", $sformatf("mnp0 p:%d c:%d  %0t", p_msg.mnp_per[0], p_msg.mnp_count[0], p_msg.timestamp), UVM_LOW)
 		end
 	endtask : run_phase
 endclass : smc_period

@@ -9,9 +9,13 @@ class smc_sequence extends uvm_sequence #(in_msg);
 
 	task body();
 		msg = in_msg::type_id::create("msg");
-		
+
 		start_item(msg);
-		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0;});
+		assert(msg.randomize() with{QRESET==1; QWRITE==0; QSEL==0; QADDR==0; QDATAIN==10;});
+		finish_item(msg);
+
+		start_item(msg);
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN==1;});
 		finish_item(msg);
 
 		start_item(msg);
@@ -19,11 +23,19 @@ class smc_sequence extends uvm_sequence #(in_msg);
 		finish_item(msg);
 
 		start_item(msg);
-		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0;});
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0; QDATAIN[10:0]==11'b00000000111;});
+		finish_item(msg);
+
+		start_item(msg);
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0; QDATAIN[10:0]==11'b00000001011;});
 		finish_item(msg);
 
 		start_item(msg);
 		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b1111111;});
+		finish_item(msg);
+
+		start_item(msg);
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0; QDATAIN[10:0]==11'b00000100000;});
 		finish_item(msg);
 
 

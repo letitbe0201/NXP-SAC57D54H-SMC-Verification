@@ -54,7 +54,7 @@ class rf_msg;
 endclass : rf_msg
 
 // Input detector message
-typedef enum {mcper, mcctl1, mcctl0, mccc3, mccc2, mccc1, mccc0, mccc7, mccc6, mccc5, mccc4, mccc11, mccc10, mccc9, mccc8, mcdc1, mcdc0, mcdc3, mcdc2, mcdc5, mcdc4, mcdc7, mcdc6, mcdc9, mcdc8, mcdc11, mcdc10, empty} regsss;
+typedef enum {empty, mcper, mcctl1, mcctl0, mccc3, mccc2, mccc1, mccc0, mccc7, mccc6, mccc5, mccc4, mccc11, mccc10, mccc9, mccc8, mcdc1, mcdc0, mcdc3, mcdc2, mcdc5, mcdc4, mcdc7, mcdc6, mcdc9, mcdc8, mcdc11, mcdc10} regsss;
 class command_msg;
 
 	// r: control register; data: data stored in the address
@@ -92,3 +92,39 @@ class period_msg;
 	endfunction : new
 
 endclass : period_msg
+
+
+typedef enum {zero, counting, halt} per_status;
+class period_counter_msg;
+	per_status per_s;
+	int counter;
+	int period;
+	int next_period;
+	realtime timestamp;
+	realtime start_time;
+	realtime end_time;
+
+	function new();
+		this.per_s = zero;
+		this.counter = 0;
+		this.period = 0;
+		this.next_period = 0;
+		this.timestamp = $realtime;
+	endfunction : new
+endclass : period_counter_msg
+
+
+typedef enum {none, fail, success} verif;
+class recirc_sign_msg;
+	verif mnm[11:0];
+	verif mnp[11:0];
+	realtime timestamp;
+
+	function new();
+		for (int i=0; i<12; i+=1) begin
+			mnm[i] = none;
+			mnp[i] = none;
+		end
+		this.timestamp = $realtime;
+	endfunction : new
+endclass : recirc_sign_msg

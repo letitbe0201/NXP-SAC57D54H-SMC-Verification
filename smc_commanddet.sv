@@ -57,9 +57,9 @@ class smc_commanddet extends uvm_scoreboard;
 				endcase
 				c_msg.timestamp = $realtime;
 				c_msg.data = i_msg.QDATAIN;
+				`uvm_info("COMMAND DET", $sformatf("%s = %d @ %0t", c_msg.r, c_msg.data, c_msg.timestamp), UVM_LOW)
 				// write to the port when INPUT changes
 				cd_port.write(c_msg);
-				`uvm_info("COMMAND DET", $sformatf("%s = %b @ %0t", c_msg.r, c_msg.data, c_msg.timestamp), UVM_LOW)
 			end
 			old_addr = i_msg.QADDR;
 			old_data = i_msg.QDATAIN;
