@@ -21,9 +21,9 @@ class smc_sequence extends uvm_sequence #(in_msg);
 		start_item(msg);
 		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0000010; QDATAIN[15:8]==0; QDATAIN[6:1]==0; QDATAIN[0]==1;});
 		finish_item(msg);
-
+		#150;
 		start_item(msg);
-		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0; QDATAIN[10:0]==11'b00000000111;});
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0;});
 		finish_item(msg);
 
 		start_item(msg);
@@ -36,6 +36,10 @@ class smc_sequence extends uvm_sequence #(in_msg);
 
 		start_item(msg);
 		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0; QDATAIN[10:0]==11'b00000100000;});
+		finish_item(msg);
+		
+		start_item(msg);
+		assert(msg.randomize() with{QRESET==0; QWRITE==0; QSEL==0; QADDR==0; QDATAIN==0;});
 		finish_item(msg);
 
 

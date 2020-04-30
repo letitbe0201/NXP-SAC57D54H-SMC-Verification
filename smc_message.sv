@@ -1,6 +1,5 @@
 // Input sequence
 class in_msg extends uvm_sequence_item;
-
 	`uvm_object_utils(in_msg)
 
 	rand bit QRESET;
@@ -13,13 +12,11 @@ class in_msg extends uvm_sequence_item;
 	function new(string name="in_msg");
 		super.new(name);
 	endfunction : new
-
 endclass : in_msg
 
 
 // Output from DUT
 class out_msg extends uvm_sequence_item;
-
 	`uvm_object_utils(out_msg)
 
 	logic [15:0] QDATAOUT;
@@ -30,14 +27,12 @@ class out_msg extends uvm_sequence_item;
 	function new(string name="out_msg");
 		super.new(name);
 	endfunction : new
-
 endclass : out_msg
 
 
 // Edge detector message
 typedef enum {x_z, Stay, Rising, Falling} rf;
 class rf_msg;
-
 	// Rising/Falling status of each port
 	rf rf_mnm[11:0];
 	rf rf_mnp[11:0];
@@ -50,13 +45,12 @@ class rf_msg;
 		end
 		this.timestamp = $realtime;
 	endfunction : new
-
 endclass : rf_msg
+
 
 // Input detector message
 typedef enum {empty, mcper, mcctl1, mcctl0, mccc3, mccc2, mccc1, mccc0, mccc7, mccc6, mccc5, mccc4, mccc11, mccc10, mccc9, mccc8, mcdc1, mcdc0, mcdc3, mcdc2, mcdc5, mcdc4, mcdc7, mcdc6, mcdc9, mcdc8, mcdc11, mcdc10} regsss;
 class command_msg;
-
 	// r: control register; data: data stored in the address
 	regsss r;
 	logic [15:0] data;
@@ -67,12 +61,10 @@ class command_msg;
 		data = D;
 		this.timestamp = $realtime;
 	endfunction : new
-
 endclass : command_msg;
 
 
 class period_msg;
-
 	// count: couter for period; per: difference between previous "rising"
 	// edges
 	int mnm_count[11:0];
@@ -90,28 +82,18 @@ class period_msg;
 		end
 		this.timestamp = $realtime;
 	endfunction : new
-
 endclass : period_msg
 
 
-typedef enum {zero, counting, halt} per_status;
-class period_counter_msg;
-	per_status per_s;
-	int counter;
+class period_start_msg;
 	int period;
-	int next_period;
-	realtime timestamp;
-	realtime start_time;
-	realtime end_time;
+	realtime per_start;
 
 	function new();
-		this.per_s = zero;
-		this.counter = 0;
 		this.period = 0;
-		this.next_period = 0;
-		this.timestamp = $realtime;
+		this.per_start = $realtime;
 	endfunction : new
-endclass : period_counter_msg
+endclass : period_start_msg
 
 
 typedef enum {none, fail, success} verif;

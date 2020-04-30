@@ -4,7 +4,7 @@
 `include "smc_period.sv"
 `include "smc_commanddet.sv"
 `include "smc_edgedet.sv"
-`include "period_counter.sv"
+`include "smc_period_start.sv"
 //`include "recirc_sign.sv"
 `include "smc_sequence.sv"
 `include "smc_sequencer.sv"
