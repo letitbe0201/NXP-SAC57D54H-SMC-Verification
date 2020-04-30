@@ -5,7 +5,7 @@
 `include "smc_commanddet.sv"
 `include "smc_edgedet.sv"
 `include "smc_period_start.sv"
-//`include "recirc_sign.sv"
+`include "control_values.sv"
 `include "smc_sequence.sv"
 `include "smc_sequencer.sv"
 `include "smc_driver.sv"

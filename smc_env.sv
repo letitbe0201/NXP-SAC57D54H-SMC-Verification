@@ -9,7 +9,7 @@ class smc_env extends uvm_env;
 	smc_commanddet cdet;
 	smc_period per;
 	smc_period_start ps;
-	//recirc_sign rs;
+	control_values cv;
 
 	function new(string name="smc_env", uvm_component par=null);
 		super.new(name, par);
@@ -22,7 +22,7 @@ class smc_env extends uvm_env;
 		cdet = smc_commanddet::type_id::create("cdet", this);
 		per = smc_period::type_id::create("per", this);
 		ps = smc_period_start::type_id::create("ps", this);
-		//rs = recirc_sign::type_id::create("rs", this);
+		cv = control_values::type_id::create("cv", this);
 		if (!uvm_config_db #(virtual smc_intf)::get(this, "", "intf", intf))
 			`uvm_fatal("SMC ENV", "Something wrong in intf config.")
 		uvm_config_db #(virtual smc_intf)::set(this, "agent", "intf", intf);
@@ -31,11 +31,11 @@ class smc_env extends uvm_env;
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		agent.ag_out.connect(edet.edfifo.analysis_export);
-		//agent.ag_out.connect(rs.rs_outfifo.analysis_export);
 		agent.ag_in.connect(cdet.cdfifo.analysis_export);
 		agent.ag_in.connect(ps.psififo.analysis_export);
-		//agent.ag_in.connect(rs.rs_infifo.analysis_export);
+		agent.ag_in.connect(cv.cvififo.analysis_export);
 		edet.ed_port.connect(per.pfifo.analysis_export);
+		ps.ps_port.connect(cv.cvimp);
 	endfunction : connect_phase
 
 endclass : smc_env

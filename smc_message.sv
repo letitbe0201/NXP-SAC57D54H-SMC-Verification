@@ -85,28 +85,29 @@ class period_msg;
 endclass : period_msg
 
 
+// Expected beginning and ending for the period counter
 class period_start_msg;
 	int period;
 	realtime per_start;
+	realtime per_end;
 
 	function new();
 		this.period = 0;
 		this.per_start = $realtime;
+		this.per_end = $realtime + 10*period;
 	endfunction : new
 endclass : period_start_msg
 
 
-typedef enum {none, fail, success} verif;
-class recirc_sign_msg;
-	verif mnm[11:0];
-	verif mnp[11:0];
+typedef enum {zero, m0c0p, m0c0m, m0c1p, m0c1m, m1c0p, m1c0m, m1c1p, m1c1m, m2c0p, m2c0m, m2c1p, m2c1m, m3c0p, m3c0m, m3c1p, m3c1m, m4c0p, m4c0m, m4cp1, m4c1m, m5c0p, m5c0m, m5c1p, m5c1m} pin;
+class exp_val_msg;
+	pin p;
+	logic val;
 	realtime timestamp;
 
 	function new();
-		for (int i=0; i<12; i+=1) begin
-			mnm[i] = none;
-			mnp[i] = none;
-		end
+		this.p = zero;
+		this.val = 0;
 		this.timestamp = $realtime;
 	endfunction : new
-endclass : recirc_sign_msg
+endclass : exp_val_msg
