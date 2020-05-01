@@ -3,7 +3,7 @@ class control_values extends uvm_scoreboard;
 	`uvm_component_utils(control_values)
 	uvm_tlm_analysis_fifo #(in_msg) cvififo;
 	uvm_analysis_imp #(period_start_msg, control_values) cvimp;
-	//uvm_analysis_port #(cv_msg) cv_port;
+	uvm_analysis_port #(exp_val_msg) cv_l_port;
 
 	in_msg i_msg;
 	period_start_msg ps_msg;
@@ -11,7 +11,7 @@ class control_values extends uvm_scoreboard;
 	realtime per_start = 0, per_startold = 0;
 	realtime per_end = 0;
 	int period = 0;
-	//cv_msg msg;
+	pin p;
 
 	function new(string name="control_values", uvm_component par=null);
 		super.new(name, par);
@@ -21,8 +21,8 @@ class control_values extends uvm_scoreboard;
 		super.build_phase(phase);
 		cvififo = new("cvififo", this);
 		cvimp = new("cvimp", this);
+		cv_l_port = new("cv_l_port", this);
 		e_msg = new();
-		//cv_port = new("cv_port", this);
 	endfunction : build_phase
 
 	function void write (period_start_msg ps_msg);
@@ -34,14 +34,20 @@ class control_values extends uvm_scoreboard;
 	task run_phase(uvm_phase phase);
 		forever begin
 			cvififo.get(i_msg);
-/*			if (!period) begin
-				
+			if (!period) begin
+				for (int i=1; i<25; i+=1) begin
+					e_msg.p = p.first();
+					e_msg.p = p.next(i);
+					e_msg.val = 0;
+					e_msg.timestamp = $realtime;
+					`uvm_info("CV", $sformatf("%s = %b @ %0t", e_msg.p, e_msg.val, e_msg.timestamp), UVM_LOW)
+				end			
 			end
-			else*/ if (per_start == per_startold) begin
+			else if (per_start == per_startold) begin
 				//`uvm_info("CV", $sformatf("Nothing happens"), UVM_LOW)
 			end
 			else begin
-				`uvm_info("CV", $sformatf("PERIOD%d starts at %0t", period, per_start), UVM_LOW)
+				`uvm_info("CV", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
 			end
 			per_startold = per_start;
 		end

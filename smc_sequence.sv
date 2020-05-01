@@ -23,6 +23,10 @@ class smc_sequence extends uvm_sequence #(in_msg);
 		finish_item(msg);
 		#150;
 		start_item(msg);
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN==0;});
+		finish_item(msg);
+		#30;
+		start_item(msg);
 		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0; QDATAIN[15:11]==5'b0;});
 		finish_item(msg);
 
