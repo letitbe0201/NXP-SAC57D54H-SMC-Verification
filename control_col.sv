@@ -33,7 +33,7 @@ class control_col extends uvm_scoreboard;
 		per_end = ps_msg.per_end;
 		period = ps_msg.period;
 
-		`uvm_info("CC", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
+		//`uvm_info("CC", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
 		for (int i=1; i<5/*25*/; i+=1) begin
 			`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)
 		end

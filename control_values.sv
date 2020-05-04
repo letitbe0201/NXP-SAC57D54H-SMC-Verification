@@ -1,12 +1,12 @@
 class control_values extends uvm_scoreboard;
 
 	`uvm_component_utils(control_values)
-	uvm_tlm_analysis_fifo #(in_msg) cvififo;
+	uvm_tlm_analysis_fifo #(bit) cvififo;
 	uvm_tlm_analysis_fifo #(command_msg) cvcfifo;
 	uvm_analysis_imp #(period_start_msg, control_values) cvimp;
 	uvm_analysis_port #(exp_val_msg) cv_l_port;
 
-	in_msg i_msg;
+	bit clk;
 	command_msg c_msg;
 	period_start_msg ps_msg;
 	exp_val_msg e_msg;
@@ -40,7 +40,7 @@ class control_values extends uvm_scoreboard;
 
 	task run_phase(uvm_phase phase);
 		forever begin
-			cvififo.get(i_msg);
+			cvififo.get(clk);
 			if (!period) begin
 				for (int i=1; i<25; i+=1) begin
 					e_msg.p = p.first();

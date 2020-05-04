@@ -20,6 +20,7 @@ class smc_monin extends uvm_monitor;
 	task run_phase(uvm_phase phase);
 		forever begin
 			@ (posedge intf.monin_intf.QCLK);
+			msg.QCLK = intf.monin_intf.QCLK;
 			msg.QRESET = intf.monin_intf.QRESET;
 			msg.QWRITE = intf.monin_intf.QWRITE;
 			msg.QSEL = intf.monin_intf.QSEL;

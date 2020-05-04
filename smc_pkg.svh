@@ -4,6 +4,7 @@
 `include "smc_period.sv"
 `include "smc_commanddet.sv"
 `include "control_col.sv"
+`include "smc_clk.sv"
 `include "smc_edgedet.sv"
 `include "smc_period_start.sv"
 `include "control_values.sv"

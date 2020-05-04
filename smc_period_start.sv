@@ -9,7 +9,7 @@ class smc_period_start extends uvm_scoreboard;
 
 	int period = 0;
 	int next_period = 0;
-	int counter = 0;
+	int counter = 0; // Period counter for detecting overflow
 
 	function new(string name="smc_period_start", uvm_component par=null);
 		super.new(name, par);
@@ -34,6 +34,7 @@ class smc_period_start extends uvm_scoreboard;
 			end
 			// Assign period when period=0
 			if (!period && next_period) begin
+				counter = 0;
 				period = next_period;
 				ps_msg.period = period;
 				ps_msg.per_start = $realtime;

@@ -2,6 +2,7 @@
 class in_msg extends uvm_sequence_item;
 	`uvm_object_utils(in_msg)
 
+	bit QCLK;
 	rand bit QRESET;
 	rand bit QWRITE;
 	rand bit QSEL;
