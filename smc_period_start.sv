@@ -38,7 +38,7 @@ class smc_period_start extends uvm_scoreboard;
 				ps_msg.period = period;
 				ps_msg.per_start = $realtime;
 				ps_msg.per_end = $realtime + period*10;
-				//`uvm_info("PERIOD START", $sformatf("Period%d starts at %0t ends at %0t", ps_msg.period, ps_msg.per_start, ps_msg.per_end), UVM_LOW)
+				`uvm_info("PERIOD START", $sformatf("Period%d starts at %0t ends at %0t", ps_msg.period, ps_msg.per_start, ps_msg.per_end), UVM_LOW)
 				ps_port.write(ps_msg);
 			end
 
@@ -46,13 +46,12 @@ class smc_period_start extends uvm_scoreboard;
 				counter += 1;
 			end
 			else if (period && period==counter) begin // Send a message when counter overflow (New period begins)
-				//`uvm_info("TEST", $sformatf("%d %d", period, next_period), UVM_LOW)
 				period = next_period;
 				counter = 1;
 				ps_msg.period = period;
 				ps_msg.per_start = $realtime;
 				ps_msg.per_end = $realtime + period*10;
-				//`uvm_info("PERIOD START", $sformatf("Period%d starts at %0t ends at %0t", ps_msg.period, ps_msg.per_start, ps_msg.per_end), UVM_LOW)
+				`uvm_info("PERIOD START", $sformatf("Period%d starts at %0t ends at %0t", ps_msg.period, ps_msg.per_start, ps_msg.per_end), UVM_LOW)
 				ps_port.write(ps_msg);
 			end
 		end

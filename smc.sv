@@ -36,8 +36,13 @@ assign MNP = out_MNP;
 int count = 0;
 
 always @(posedge QCLK) begin
+	
+	for (int i=0; i<12; i+=1) begin
+		out_MNM[i] = 0;
+		out_MNP[i] = 0;
+	end
 
-	if (count==0) begin
+/*	if (count==0) begin
 		out_MNM[1] = 1; 
 		out_MNP[0] = 1;
 	end
@@ -72,7 +77,7 @@ always @(posedge QCLK) begin
 	end
 
 	count += 1;
-
+*/
 end
 
 

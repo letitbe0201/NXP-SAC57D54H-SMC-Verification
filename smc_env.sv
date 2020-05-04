@@ -6,7 +6,10 @@ class smc_env extends uvm_env;
 
 	smc_agent agent;
 	smc_edgedet edet;
+	smc_pinval pv;
 	smc_commanddet cdet;
+	control_col cc;
+	low_det ld;
 	smc_period per;
 	smc_period_start ps;
 	control_values cv;
@@ -19,7 +22,10 @@ class smc_env extends uvm_env;
 		super.build_phase(phase);
 		agent = smc_agent::type_id::create("agent", this);
 		edet = smc_edgedet::type_id::create("edet", this);
+		pv = smc_pinval::type_id::create("pv", this);
 		cdet = smc_commanddet::type_id::create("cdet", this);
+		cc = control_col::type_id::create("cc", this);
+		ld = low_det::type_id::create("ld", this);
 		per = smc_period::type_id::create("per", this);
 		ps = smc_period_start::type_id::create("ps", this);
 		cv = control_values::type_id::create("cv", this);
@@ -31,11 +37,17 @@ class smc_env extends uvm_env;
 	function void connect_phase(uvm_phase phase);
 		super.connect_phase(phase);
 		agent.ag_out.connect(edet.edfifo.analysis_export);
+		agent.ag_out.connect(pv.pvfifo.analysis_export);
 		agent.ag_in.connect(cdet.cdfifo.analysis_export);
 		agent.ag_in.connect(ps.psififo.analysis_export);
 		agent.ag_in.connect(cv.cvififo.analysis_export);
 		edet.ed_port.connect(per.pfifo.analysis_export);
 		ps.ps_port.connect(cv.cvimp);
+		ps.ps_port.connect(cc.ccimp);
+		cdet.cd_port.connect(cv.cvcfifo.analysis_export);
+		cdet.cd_port.connect(cc.cccfifo.analysis_export);
+		cv.cv_l_port.connect(ld.ld_imp);
+		pv.pv_port.connect(ld.ldfifo.analysis_export);
 	endfunction : connect_phase
 
 endclass : smc_env
