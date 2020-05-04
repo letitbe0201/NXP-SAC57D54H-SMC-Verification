@@ -1,16 +1,14 @@
 class control_col extends uvm_scoreboard;
 
 	`uvm_component_utils(control_col)
-	uvm_analysis_imp #(period_start_msg, control_col) ccimp;
+	uvm_tlm_analysis_fifo #(bit) ccclkfifo;
 	uvm_tlm_analysis_fifo #(command_msg) cccfifo;
 	uvm_analysis_port #(control_msg) cc_port;
 
 	command_msg c_msg;
-	period_start_msg ps_msg;
 	control_msg ct_msg[24:0];
 
-	realtime per_start = 0, per_end = 0;
-	int period = 0;
+	bit clk;
 	pin pp;
 
 	function new(string name="control_col", uvm_component par=null);
@@ -19,8 +17,9 @@ class control_col extends uvm_scoreboard;
 
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
-		ccimp = new("ccimp", this);
+		ccclkfifo = new("ccclkfifo", this);
 		cccfifo = new("cccfifo", this);
+		cc_port = new("cc_port", this);
 		for (int i=1; i<25; i+=1) begin
 			pp = pp.first();
 			pp = pp.next(i);
@@ -28,27 +27,24 @@ class control_col extends uvm_scoreboard;
 		end
 	endfunction : build_phase
 
-	function void write (period_start_msg ps_msg);
-		per_start = ps_msg.per_start;
-		per_end = ps_msg.per_end;
-		period = ps_msg.period;
-
-		//`uvm_info("CC", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
-		for (int i=1; i<5/*25*/; i+=1) begin
-			`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)
-		end
-	endfunction : write
-
 	task run_phase(uvm_phase phase);
 		forever begin
-			cccfifo.get(c_msg);
-			case (c_msg.r)
-				mcctl1: begin
-					for (int i=1; i<25; i+=1) begin
-						ct_msg[i].recirc = c_msg.data[7];
-						ct_msg[i].timestamp = c_msg.timestamp;
-					end
-				end
+//			fork 
+//				begin
+//					ccclkfifo.get(clk);
+//					for (int i=1; i<5/*25*/; i+=1) begin
+						//`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)
+//					end
+//				end
+				begin
+					cccfifo.get(c_msg);
+					case (c_msg.r)
+						mcctl1: begin
+							for (int i=1; i<25; i+=1) begin
+								ct_msg[i].recirc = c_msg.data[7];
+								ct_msg[i].timestamp = c_msg.timestamp;
+							end
+						end
 				mccc0: begin
 					ct_msg[1].mo = mcom'(c_msg.data[7:6]);
 					ct_msg[1].ma = mcam'(c_msg.data[5:4]);
@@ -241,7 +237,13 @@ class control_col extends uvm_scoreboard;
 					ct_msg[24].sign = c_msg.data[15];
 					ct_msg[24].timestamp = c_msg.timestamp;
 				end
-			endcase
+					endcase
+				end
+//			join_none;
+			for (int i=1; i</*5*/25; i+=1) begin
+				cc_port.write(ct_msg[i]);
+				//`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)
+			end
 		end
 	endtask : run_phase
 

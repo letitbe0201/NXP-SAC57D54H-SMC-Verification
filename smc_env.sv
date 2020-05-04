@@ -44,11 +44,11 @@ class smc_env extends uvm_env;
 		agent.ag_in.connect(cdet.cdfifo.analysis_export);
 		agent.ag_in.connect(ps.psififo.analysis_export);
 		clk.clk_port.connect(cv.cvififo.analysis_export);
+		clk.clk_port.connect(cc.ccclkfifo.analysis_export);
 		edet.ed_port.connect(per.pfifo.analysis_export);
-		ps.ps_port.connect(cv.cvimp);
-		ps.ps_port.connect(cc.ccimp);
-		cdet.cd_port.connect(cv.cvcfifo.analysis_export);
+		ps.ps_port.connect(cv.cvpimp);
 		cdet.cd_port.connect(cc.cccfifo.analysis_export);
+		cc.cc_port.connect(cv.cvcimp);
 		cv.cv_l_port.connect(ld.ld_imp);
 		pv.pv_port.connect(ld.ldfifo.analysis_export);
 	endfunction : connect_phase
