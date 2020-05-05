@@ -113,6 +113,7 @@ class control_msg;
 	mcom mo;
 	mcam ma;
 	logic sign;
+	logic [10:0] duty;
 	logic [1:0] cd;
 	realtime timestamp;
 
@@ -122,6 +123,7 @@ class control_msg;
 		this.mo = half_b_m;
 		this.ma = disabled;
 		this.sign = 0;
+		this.duty = 0;
 		this.cd = 0;
 		this.timestamp = $realtime;
 	endfunction : new
@@ -141,6 +143,33 @@ class exp_val_msg;
 	endfunction : new
 endclass : exp_val_msg
 
+class exp_pulse_msg;
+	pin p;
+	int period;
+	realtime per_start;
+	realtime per_end;
+	logic recirc;
+	mcom mo;
+	mcam ma;
+	logic sign;
+	logic [10:0] duty;
+	logic [1:0] cd;
+	realtime timestamp;
+
+	function new(pin pp, int per, realtime ps, realtime pe, logic r, mcom o, mcam a, logic s, logic[10:0] d, logic[1:0] c);
+		this.p = pp;
+		this.period = per;
+		this.per_start = ps;
+		this.per_end = pe;
+		this.recirc = r;
+		this.mo = o;
+		this.ma = a;
+		this.sign = s;
+		this.duty = d;
+		this.cd = c;
+		this.timestamp = $realtime;
+	endfunction : new
+endclass : exp_pulse_msg;
 
 // Output from the DUT
 class obs_val_msg;

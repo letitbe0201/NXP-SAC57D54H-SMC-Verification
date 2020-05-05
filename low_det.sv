@@ -2,17 +2,21 @@ class low_det extends uvm_scoreboard;
 
 	`uvm_component_utils(low_det)
 	uvm_tlm_analysis_fifo #(obs_val_msg) ldfifo;
-	uvm_analysis_imp #(exp_val_msg, low_det) ld_imp;
+	uvm_analysis_imp #(exp_pulse_msg, low_det) ld_imp;
 
 	obs_val_msg o_msg;
-	exp_val_msg e_msg;
+	exp_pulse_msg ep_msg;
 
-	bit e_receive = 0;
 	// Store timestamp and obesrved pin values (Corresponding to enum pin)
 	logic [24:0] s_pin;
 	realtime s_time;
+	// Store received EXP LOW timefrmae
+	realtime exp_start[24:0];
+	realtime exp_end[24:0];
 
-	function new(string name="smc_edgedet", uvm_component par=null);
+	pin p = zero;
+
+	function new(string name="low_det", uvm_component par=null);
 		super.new(name, par);
 	endfunction : new
 
@@ -20,14 +24,12 @@ class low_det extends uvm_scoreboard;
 		super.build_phase(phase);
 		ldfifo = new("ldfifo", this);
 		ld_imp = new("ld_imp", this);
-		e_msg = new();
 	endfunction : build_phase
 
-	function void write (exp_val_msg ep_msg);
-		e_msg.p = ep_msg.p;
-		e_msg.val = ep_msg.val;
-		e_msg.timestamp = ep_msg.timestamp;
-		e_receive = 1;
+	function void write (exp_pulse_msg ep_msg);
+		//`uvm_info("LD", $sformatf("%s|per%8d|p_s %0t|p_e %0t|r %b|mo %s|ma %s|s %b|duty%8d|cd %b  %0t", ep_msg.p, ep_msg.period, ep_msg.per_start, ep_msg.per_end, ep_msg.recirc, ep_msg.mo, ep_msg.ma, ep_msg.sign, ep_msg.duty, ep_msg.cd, ep_msg.timestamp), UVM_LOW)
+		exp_start[ep_msg.p] = ep_msg.per_start;
+		exp_end[ep_msg.p] = ep_msg.per_end;
 	endfunction : write
 
 	task run_phase(uvm_phase phase);
@@ -37,31 +39,13 @@ class low_det extends uvm_scoreboard;
 			s_pin[24:13] = o_msg.MNP[11:0];
 			s_time = o_msg.timestamp;
 			//`uvm_info("LD", $sformatf("m0c0p = %b  |  m0c1m = %b   @%0t", s_mnp[0], s_mnm[1], s_time), UVM_LOW)
-			// Compare M&P OUTPUT when EXPECTED VALUES received
-			if (e_receive) begin
-				//`uvm_info("LD", $sformatf("%s = %b  @%0t", e_msg.p, e_msg.val, e_msg.timestamp), UVM_LOW)
-				//`uvm_info("LD", $sformatf("m0c0p = %b  |  m0c1m = %b   @%0t", s_pin[13], s_pin[2], s_time), UVM_LOW)
-				if (e_msg.timestamp==s_time && e_msg.timestamp!=0) begin // Exclude time = 0
-					//`uvm_info("LD", $sformatf("%0t %s %b | mnp0:%b mnm1:%b", s_time, e_msg.p, e_msg.val, s_pin[2], s_pin[13]), UVM_LOW)
-					// VERIFY: EXP = OBS = 0
-					for (int i=1; i<25; i+=1) begin
-						if (e_msg.p == i) begin
-							if (e_msg.val == s_pin[i]) begin
-								;//`uvm_info("LD", $sformatf("%s  EXP=OBS=%b  @%0t", e_msg.p, e_msg.val, e_msg.timestamp), UVM_LOW)
-								/////////////// Send to RESULT
-							end
-							else
-								`uvm_error("LD", $sformatf("%s  EXP=%b!=OBS=%b  @%0t", e_msg.p, e_msg.val, s_pin[i], e_msg.timestamp))
-						end	
-					end
-				end
-				else if (!e_msg.timestamp); // Do nothing when time = 0
-				else
-					`uvm_error("LD", "Timestamp mismatch!")
-			end
 			
-			e_receive = 0;
+			for (int i=1; i<25; i+=1) begin
+				if (exp_start[i]<=s_time && s_time<=exp_end[i]) begin
+					if (s_pin[i])
+						`uvm_error("LD", $sformatf("%s should be 0 at %0t", p.next(i), s_time))
+				end
 			end
+		end
 	endtask : run_phase
-
-endclass : low_det 
+endclass : low_det

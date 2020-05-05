@@ -10,6 +10,7 @@ class smc_env extends uvm_env;
 	smc_pinval pv;
 	smc_commanddet cdet;
 	control_col cc;
+	off_det od;
 	low_det ld;
 	smc_period per;
 	smc_period_start ps;
@@ -27,6 +28,7 @@ class smc_env extends uvm_env;
 		pv = smc_pinval::type_id::create("pv", this);
 		cdet = smc_commanddet::type_id::create("cdet", this);
 		cc = control_col::type_id::create("cc", this);
+		od = off_det::type_id::create("od", this);
 		ld = low_det::type_id::create("ld", this);
 		per = smc_period::type_id::create("per", this);
 		ps = smc_period_start::type_id::create("ps", this);
@@ -49,7 +51,9 @@ class smc_env extends uvm_env;
 		ps.ps_port.connect(cv.cvpimp);
 		cdet.cd_port.connect(cc.cccfifo.analysis_export);
 		cc.cc_port.connect(cv.cvcimp);
+		cv.cv_off_port.connect(od.od_imp);
 		cv.cv_l_port.connect(ld.ld_imp);
+		pv.pv_port.connect(od.odfifo.analysis_export);
 		pv.pv_port.connect(ld.ldfifo.analysis_export);
 	endfunction : connect_phase
 

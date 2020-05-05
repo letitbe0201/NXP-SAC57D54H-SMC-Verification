@@ -167,74 +167,98 @@ class control_col extends uvm_scoreboard;
 				end
 				mcdc0: begin
 					ct_msg[1].sign = c_msg.data[15];
+					ct_msg[1].duty = c_msg.data[10:0];
 					ct_msg[1].timestamp = c_msg.timestamp;
 					ct_msg[13].sign = c_msg.data[15];
+					ct_msg[13].duty = c_msg.data[10:0];
 					ct_msg[13].timestamp = c_msg.timestamp;
 			       	end
 				mcdc1: begin
 					ct_msg[2].sign = c_msg.data[15];
+					ct_msg[2].duty = c_msg.data[10:0];
 					ct_msg[2].timestamp = c_msg.timestamp;
 					ct_msg[14].sign = c_msg.data[15];
+					ct_msg[14].duty = c_msg.data[10:0];
 					ct_msg[14].timestamp = c_msg.timestamp;
 				end
 				mcdc2: begin
 					ct_msg[3].sign = c_msg.data[15];
+					ct_msg[3].duty = c_msg.data[10:0];
 					ct_msg[3].timestamp = c_msg.timestamp;
 					ct_msg[15].sign = c_msg.data[15];
+					ct_msg[15].duty = c_msg.data[10:0];
 					ct_msg[15].timestamp = c_msg.timestamp;
 				end
 				mcdc3: begin
 					ct_msg[4].sign = c_msg.data[15];
+					ct_msg[4].duty = c_msg.data[10:0];
 					ct_msg[4].timestamp = c_msg.timestamp;
 					ct_msg[16].sign = c_msg.data[15];
+					ct_msg[16].duty = c_msg.data[10:0];
 					ct_msg[16].timestamp = c_msg.timestamp;
 				end
 				mcdc4: begin
 					ct_msg[5].sign = c_msg.data[15];
+					ct_msg[5].duty = c_msg.data[10:0];
 					ct_msg[5].timestamp = c_msg.timestamp;
 					ct_msg[17].sign = c_msg.data[15];
+					ct_msg[17].duty = c_msg.data[10:0];
 					ct_msg[17].timestamp = c_msg.timestamp;
 				end
 				mcdc5: begin
 					ct_msg[6].sign = c_msg.data[15];
+					ct_msg[6].duty = c_msg.data[10:0];
 					ct_msg[6].timestamp = c_msg.timestamp;
 					ct_msg[18].sign = c_msg.data[15];
+					ct_msg[18].duty = c_msg.data[10:0];
 					ct_msg[18].timestamp = c_msg.timestamp;
 				end
 				mcdc6: begin
 					ct_msg[7].sign = c_msg.data[15];
+					ct_msg[7].duty = c_msg.data[10:0];
 					ct_msg[7].timestamp = c_msg.timestamp;
 					ct_msg[19].sign = c_msg.data[15];
+					ct_msg[19].duty = c_msg.data[10:0];
 					ct_msg[19].timestamp = c_msg.timestamp;
 				end
 				mcdc7: begin
 					ct_msg[8].sign = c_msg.data[15];
+					ct_msg[8].duty = c_msg.data[10:0];
 					ct_msg[8].timestamp = c_msg.timestamp;
 					ct_msg[20].sign = c_msg.data[15];
+					ct_msg[20].duty = c_msg.data[10:0];
 					ct_msg[20].timestamp = c_msg.timestamp;
 				end
 				mcdc8: begin
 					ct_msg[9].sign = c_msg.data[15];
+					ct_msg[9].duty = c_msg.data[10:0];
 					ct_msg[9].timestamp = c_msg.timestamp;
 					ct_msg[21].sign = c_msg.data[15];
+					ct_msg[21].duty = c_msg.data[10:0];
 					ct_msg[21].timestamp = c_msg.timestamp;
 				end
 				mcdc9: begin
 					ct_msg[10].sign = c_msg.data[15];
+					ct_msg[10].duty = c_msg.data[10:0];
 					ct_msg[10].timestamp = c_msg.timestamp;
 					ct_msg[22].sign = c_msg.data[15];
+					ct_msg[22].duty = c_msg.data[10:0];
 					ct_msg[22].timestamp = c_msg.timestamp;
 				end
 				mcdc10: begin
 					ct_msg[11].sign = c_msg.data[15];
+					ct_msg[11].duty = c_msg.data[10:0];
 					ct_msg[11].timestamp = c_msg.timestamp;
 					ct_msg[23].sign = c_msg.data[15];
+					ct_msg[23].duty = c_msg.data[10:0];
 					ct_msg[23].timestamp = c_msg.timestamp;
 				end
 				mcdc11: begin
 					ct_msg[12].sign = c_msg.data[15];
+					ct_msg[12].duty = c_msg.data[10:0];
 					ct_msg[12].timestamp = c_msg.timestamp;
 					ct_msg[24].sign = c_msg.data[15];
+					ct_msg[24].duty = c_msg.data[10:0];
 					ct_msg[24].timestamp = c_msg.timestamp;
 				end
 					endcase

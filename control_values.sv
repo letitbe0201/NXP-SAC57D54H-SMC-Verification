@@ -6,12 +6,14 @@ class control_values extends uvm_scoreboard;
 	uvm_tlm_analysis_fifo #(bit) cvififo;
 	uvm_analysis_imp_ps #(period_start_msg, control_values) cvpimp;
 	uvm_analysis_imp_cc #(control_msg, control_values) cvcimp;
-	uvm_analysis_port #(exp_val_msg) cv_l_port;
+	uvm_analysis_port #(exp_val_msg) cv_off_port;
+	uvm_analysis_port #(exp_pulse_msg) cv_l_port;
 
 	bit clk;
 	control_msg ct_msg[24:0];
 	period_start_msg ps_msg;
 	exp_val_msg e_msg;
+	exp_pulse_msg ep_msg;
 	realtime per_start = 0, per_startold = 0;
 	realtime per_end = 0;
 	int period = 0;
@@ -27,6 +29,7 @@ class control_values extends uvm_scoreboard;
 		cvififo = new("cvififo", this);
 		cvpimp = new("cvpimp", this);
 		cvcimp = new("cvcimp", this);
+		cv_off_port = new("cv_off_port", this);
 		cv_l_port = new("cv_l_port", this);
 		e_msg = new();
 		for (int i=0; i<25; i+=1) begin
@@ -51,6 +54,7 @@ class control_values extends uvm_scoreboard;
 	task run_phase(uvm_phase phase);
 		forever begin
 			cvififo.get(clk);
+			// When PERIOD = 0
 			if (!period) begin
 				for (int i=1; i<25; i+=1) begin
 					e_msg.p = p.first();
@@ -58,17 +62,44 @@ class control_values extends uvm_scoreboard;
 					e_msg.val = 0;
 					e_msg.timestamp = per_start + 10*low_count; // CLOCK RELATED
 					//`uvm_info("CV", $sformatf("%s = %b @ %0t", e_msg.p, e_msg.val, e_msg.timestamp), UVM_LOW)
-					cv_l_port.write(e_msg);
+					cv_off_port.write(e_msg);
 				end			
 				low_count += 1;
 			end
+			// Counter counts when PERIOD != 0
 			else if (per_start == per_startold) begin
 				//`uvm_info("CV", $sformatf("Nothing happens"), UVM_LOW)
 			end
+			// When counter starts counting after overflow
 			else begin
-				`uvm_info("CV", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
-				`uvm_info("CV", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[4].p, ct_msg[4].recirc, ct_msg[4].mo, ct_msg[4].ma, ct_msg[4].sign, ct_msg[4].cd, ct_msg[4].timestamp), UVM_LOW)
+				//`uvm_info("CV", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
+				//`uvm_info("CV", $sformatf("%s r%b mo:%s ma:%s s%b duty%d cd%b  %0t", ct_msg[4].p, ct_msg[4].recirc, ct_msg[4].mo, ct_msg[4].ma, ct_msg[4].sign, ct_msg[4].duty, ct_msg[4].cd, ct_msg[4].timestamp), UVM_LOW)
 				low_count = 0;
+				
+				/////
+				for (int j=1; j<25; j+=1) begin
+					ep_msg = new(ct_msg[j].p, period, per_start, per_end, ct_msg[j].recirc, ct_msg[j].mo, ct_msg[j].ma, ct_msg[j].sign, ct_msg[j].duty, ct_msg[j].cd);
+					case (ct_msg[j].mo)
+						half_b_m: begin
+							if (j >= 13) // At PLUS Side
+								cv_l_port.write(ep_msg);
+							else begin // At MINUS Side
+							end
+						end
+						half_b_p: begin
+							if (j < 13)
+								cv_l_port.write(ep_msg);
+							else begin
+							end
+						end
+						full_b: begin
+						end
+						dualfull_b: begin
+						end
+					endcase		
+				end
+				/////
+
 			end
 			per_startold = per_start;
 		end

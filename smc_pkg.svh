@@ -9,6 +9,7 @@
 `include "smc_period_start.sv"
 `include "control_values.sv"
 `include "smc_pinval.sv"
+`include "off_det.sv"
 `include "low_det.sv"
 `include "smc_sequence.sv"
 `include "smc_sequencer.sv"
