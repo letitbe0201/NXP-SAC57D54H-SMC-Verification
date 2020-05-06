@@ -8,6 +8,7 @@ class control_values extends uvm_scoreboard;
 	uvm_analysis_imp_cc #(control_msg, control_values) cvcimp;
 	uvm_analysis_port #(exp_val_msg) cv_off_port;
 	uvm_analysis_port #(exp_pulse_msg) cv_l_port;
+	uvm_analysis_port #(exp_pulse_msg) cv_h_port;
 
 	bit clk;
 	control_msg ct_msg[24:0];
@@ -31,6 +32,7 @@ class control_values extends uvm_scoreboard;
 		cvcimp = new("cvcimp", this);
 		cv_off_port = new("cv_off_port", this);
 		cv_l_port = new("cv_l_port", this);
+		cv_h_port = new("cv_h_port", this);
 		e_msg = new();
 		for (int i=0; i<25; i+=1) begin
 			ct_msg[i] = new(zero);
@@ -63,8 +65,7 @@ class control_values extends uvm_scoreboard;
 					e_msg.timestamp = per_start + 10*low_count; // CLOCK RELATED
 					//`uvm_info("CV", $sformatf("%s = %b @ %0t", e_msg.p, e_msg.val, e_msg.timestamp), UVM_LOW)
 					cv_off_port.write(e_msg);
-				end			
-				low_count += 1;
+				end			low_count += 1;
 			end
 			// Counter counts when PERIOD != 0
 			else if (per_start == per_startold) begin
@@ -76,30 +77,60 @@ class control_values extends uvm_scoreboard;
 				//`uvm_info("CV", $sformatf("%s r%b mo:%s ma:%s s%b duty%d cd%b  %0t", ct_msg[4].p, ct_msg[4].recirc, ct_msg[4].mo, ct_msg[4].ma, ct_msg[4].sign, ct_msg[4].duty, ct_msg[4].cd, ct_msg[4].timestamp), UVM_LOW)
 				low_count = 0;
 				
-				/////
+				// Allocate each pin to its verification scoreboard
 				for (int j=1; j<25; j+=1) begin
 					ep_msg = new(ct_msg[j].p, period, per_start, per_end, ct_msg[j].recirc, ct_msg[j].mo, ct_msg[j].ma, ct_msg[j].sign, ct_msg[j].duty, ct_msg[j].cd);
-					case (ct_msg[j].mo)
-						half_b_m: begin
-							if (j >= 13) // At PLUS Side
-								cv_l_port.write(ep_msg);
-							else begin // At MINUS Side
+					if (ct_msg[j].ma == disabled) // If MCAM = 00
+						cv_l_port.write(ep_msg);
+					else begin // If MCAM != DISABLED
+						case (ct_msg[j].mo)
+							half_b_m: begin
+								if (j >= 13) // At PLUS Side
+									cv_l_port.write(ep_msg);
+								else begin // At MINUS Side
+								end
 							end
-						end
-						half_b_p: begin
-							if (j < 13)
-								cv_l_port.write(ep_msg);
-							else begin
+							half_b_p: begin
+								if (j < 13)
+									cv_l_port.write(ep_msg);
+								else begin
+								end
 							end
-						end
-						full_b: begin
-						end
-						dualfull_b: begin
-						end
-					endcase		
+/*							full_b: begin
+							end
+							dualfull_b: begin
+							end
+							// DUAL-FULL & FULL
+*/							default: begin
+								//`uvm_info("CV", $sformatf("%b", {ct_msg[j].recirc, ct_msg[j].sign}), UVM_LOW)
+								case ({ct_msg[j].recirc, ct_msg[j].sign})
+									00: begin
+										if (j >= 13) begin // PLUS
+											cv_h_port.write(ep_msg);
+										end
+									end
+									01: begin
+										if (j < 13) begin // MINUS
+											cv_h_port.write(ep_msg);
+										end
+									end
+									10: begin
+										if (j < 13) begin // MINUS
+											cv_l_port.write(ep_msg);
+										end
+									end
+									11: begin
+										if (j >= 13) begin // PLUS
+											cv_l_port.write(ep_msg);
+										end
+									end
+									default: begin
+									end
+								endcase
+							end
+						endcase		
+					end
 				end
-				/////
-
 			end
 			per_startold = per_start;
 		end
