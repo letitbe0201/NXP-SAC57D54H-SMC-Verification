@@ -42,6 +42,7 @@ always @(posedge QCLK) begin
 		out_MNP[i] = 0;
 	end
 
+
 /*	if (count==0) begin
 		out_MNM[1] = 1; 
 		out_MNP[0] = 1;
@@ -78,6 +79,20 @@ always @(posedge QCLK) begin
 
 	count += 1;
 */
+
+	if (count<3) begin
+		out_MNP[4] = 0;
+	end
+	else if (count == 7) begin
+		out_MNP[4] = 0;
+		count = 0;	
+	end
+	else begin
+		out_MNP[4] = 1;	
+	end
+
+	count += 1;
+
 end
 
 

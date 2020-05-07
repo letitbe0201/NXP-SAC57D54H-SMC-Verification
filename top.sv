@@ -11,7 +11,7 @@ module top();
 	initial begin
 		i.QCLK = 0;
 		#5;
-		repeat (5000) begin
+		repeat (3000) begin
 			#5 i.QCLK = 1;
 			#5 i.QCLK = 0;
 		end
