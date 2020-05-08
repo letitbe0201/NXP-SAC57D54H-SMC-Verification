@@ -61,6 +61,7 @@ class control_values extends uvm_scoreboard;
 
 	// Assign pins to corresponding ports based on Alignment mode MCAM
 	function void assign_MCAM (int j, exp_pulse_msg ep_msg);
+		//`uvm_info("CV", $sformatf("%s MCAM %s  %0t", ep_msg.p, ct_msg[j].ma, ct_msg[j].timestamp), UVM_LOW)
 		case (ct_msg[j].ma)
 			left:
 				cv_pl_port.write(ep_msg);
@@ -143,7 +144,7 @@ class control_values extends uvm_scoreboard;
 			end
 			// When counter starts counting after overflow
 			else begin
-				`uvm_info("CV", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
+				//`uvm_info("CV", $sformatf("PERIOD%d starts at %0t, ends at %0t", period, per_start, per_end), UVM_LOW)
 				//`uvm_info("CV", $sformatf("%s r%b mo:%s ma:%s s%b duty%d cd%b  %0t", ct_msg[4].p, ct_msg[4].recirc, ct_msg[4].mo, ct_msg[4].ma, ct_msg[4].sign, ct_msg[4].duty, ct_msg[4].cd, ct_msg[4].timestamp), UVM_LOW)
 				low_count = 0;
 				

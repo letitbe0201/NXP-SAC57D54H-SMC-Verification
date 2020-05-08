@@ -39,7 +39,7 @@ class smc_sequence extends uvm_sequence #(in_msg);
 		finish_item(msg);
 
 		start_item(msg);// MCCC4
-		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0010111; QDATAIN==8'b01010011;});
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0010111; QDATAIN==8'b01100011;});
 		finish_item(msg);
 
 		start_item(msg);
@@ -55,7 +55,7 @@ class smc_sequence extends uvm_sequence #(in_msg);
 		finish_item(msg);
 #7010;
 		start_item(msg);// MCCC4
-		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0010111; QDATAIN==8'b01010000;});
+		assert(msg.randomize() with{QRESET==0; QWRITE==1; QSEL==1; QADDR==7'b0010111; QDATAIN==8'b01100000;});
 		finish_item(msg);
 
 /*		start_item(msg);

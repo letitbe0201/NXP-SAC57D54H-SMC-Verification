@@ -13,6 +13,7 @@
 `include "low_det.sv"
 `include "high_det.sv"
 `include "pwm_left.sv"
+`include "pwm_right.sv"
 `include "smc_sequence.sv"
 `include "smc_sequencer.sv"
 `include "smc_driver.sv"
