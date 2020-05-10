@@ -1,3 +1,4 @@
+// Ovserving period
 class smc_period extends uvm_scoreboard;
 
 	`uvm_component_utils(smc_period)

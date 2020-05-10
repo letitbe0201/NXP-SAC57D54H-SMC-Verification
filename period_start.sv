@@ -1,3 +1,4 @@
+// Determine when a new period starts counting
 class period_start extends uvm_scoreboard;
 
 	`uvm_component_utils(period_start)

@@ -1,3 +1,4 @@
+// Verify if a pin is off (Period = 0)
 class off_det extends uvm_scoreboard;
 
 	`uvm_component_utils(off_det)

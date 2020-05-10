@@ -1,3 +1,4 @@
+// Collect rising/falling message from output monitor
 class smc_edgedet extends uvm_scoreboard;
 
 	`uvm_component_utils(smc_edgedet)

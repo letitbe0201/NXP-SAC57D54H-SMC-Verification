@@ -1,3 +1,4 @@
+// Clock for reference model
 class clk_control extends uvm_scoreboard;
 
 	`uvm_component_utils(clk_control)

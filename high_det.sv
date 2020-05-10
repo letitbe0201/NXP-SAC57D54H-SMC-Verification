@@ -1,3 +1,4 @@
+// Verify if a pin stays at logic HIGH
 class high_det extends uvm_scoreboard;
 
 	`uvm_component_utils(high_det)

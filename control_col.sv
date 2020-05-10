@@ -1,3 +1,4 @@
+// Collect all the parameters for PWM on 24 pins 
 class control_col extends uvm_scoreboard;
 
 	`uvm_component_utils(control_col)
@@ -29,22 +30,14 @@ class control_col extends uvm_scoreboard;
 
 	task run_phase(uvm_phase phase);
 		forever begin
-//			fork 
-//				begin
-//					ccclkfifo.get(clk);
-//					for (int i=1; i<5/*25*/; i+=1) begin
-						//`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)
-//					end
-//				end
-				begin
-					cccfifo.get(c_msg);
-					case (c_msg.r)
-						mcctl1: begin
-							for (int i=1; i<25; i+=1) begin
-								ct_msg[i].recirc = c_msg.data[7];
-								ct_msg[i].timestamp = c_msg.timestamp;
-							end
-						end
+			cccfifo.get(c_msg);
+			case (c_msg.r)
+				mcctl1: begin
+					for (int i=1; i<25; i+=1) begin
+						ct_msg[i].recirc = c_msg.data[7];
+						ct_msg[i].timestamp = c_msg.timestamp;
+					end
+				end
 				mccc0: begin
 					ct_msg[1].mo = mcom'(c_msg.data[7:6]);
 					ct_msg[1].ma = mcam'(c_msg.data[5:4]);
@@ -261,9 +254,7 @@ class control_col extends uvm_scoreboard;
 					ct_msg[24].duty = c_msg.data[10:0];
 					ct_msg[24].timestamp = c_msg.timestamp;
 				end
-					endcase
-				end
-//			join_none;
+			endcase
 			for (int i=1; i</*5*/25; i+=1) begin
 				cc_port.write(ct_msg[i]);
 				//`uvm_info("CC", $sformatf("%s r%b mo:%s ma:%s s%b cd%b  %0t", ct_msg[i].p, ct_msg[i].recirc, ct_msg[i].mo, ct_msg[i].ma, ct_msg[i].sign, ct_msg[i].cd, ct_msg[i].timestamp), UVM_LOW)

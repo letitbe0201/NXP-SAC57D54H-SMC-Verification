@@ -1,3 +1,4 @@
+// Verify a PWM signal in CENTER alignment
 class pwm_center extends uvm_scoreboard;
 
 	`uvm_component_utils(pwm_center)

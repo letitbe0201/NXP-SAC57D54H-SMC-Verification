@@ -1,3 +1,5 @@
+// Collect and Send controlling parameters when the PERIOD starts counting
+// (Counter overflow)
 `uvm_analysis_imp_decl(_ps)
 `uvm_analysis_imp_decl(_cc)
 class control_values extends uvm_scoreboard;

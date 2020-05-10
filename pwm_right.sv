@@ -1,3 +1,4 @@
+// Verify a PWM signal in RIGHT alignment
 class pwm_right extends uvm_scoreboard;
 
 	`uvm_component_utils(pwm_right)

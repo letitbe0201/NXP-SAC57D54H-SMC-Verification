@@ -1,3 +1,4 @@
+// Collect observing pin values
 class smc_pinval extends uvm_scoreboard;
 
 	`uvm_component_utils(smc_pinval)
