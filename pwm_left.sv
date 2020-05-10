@@ -99,7 +99,7 @@ class pwm_left extends uvm_scoreboard;
 				prev_start[i] = ep[i].per_start;
 				prev_end[i] = ep[i].per_end;
 			end
-			`uvm_info("PWM LEFT", $sformatf("m2c0p %b  @%0t", s_pin[17], o_msg.timestamp), UVM_LOW)
+//			`uvm_info("PWM LEFT", $sformatf("m2c0p %b  @%0t", s_pin[17], o_msg.timestamp), UVM_LOW)
 		end
 	endtask : run_phase
 endclass : pwm_left

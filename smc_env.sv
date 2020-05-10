@@ -5,10 +5,10 @@ class smc_env extends uvm_env;
 	virtual smc_intf intf;
 
 	smc_agent agent;
-	smc_clk clk;
+	clk_control clk;
 	smc_edgedet edet;
 	smc_pinval pv;
-	smc_commanddet cdet;
+	commanddet cdet;
 	control_col cc;
 	off_det od;
 	low_det ld;
@@ -17,7 +17,7 @@ class smc_env extends uvm_env;
 	pwm_right pr;
 	pwm_center pc;
 	smc_period per;
-	smc_period_start ps;
+	period_start ps;
 	control_values cv;
 
 	function new(string name="smc_env", uvm_component par=null);
@@ -27,10 +27,10 @@ class smc_env extends uvm_env;
 	function void build_phase(uvm_phase phase);
 		super.build_phase(phase);
 		agent = smc_agent::type_id::create("agent", this);
-		clk = smc_clk::type_id::create("clk", this);
+		clk = clk_control::type_id::create("clk", this);
 		edet = smc_edgedet::type_id::create("edet", this);
 		pv = smc_pinval::type_id::create("pv", this);
-		cdet = smc_commanddet::type_id::create("cdet", this);
+		cdet = commanddet::type_id::create("cdet", this);
 		cc = control_col::type_id::create("cc", this);
 		od = off_det::type_id::create("od", this);
 		ld = low_det::type_id::create("ld", this);
@@ -39,7 +39,7 @@ class smc_env extends uvm_env;
 		pr = pwm_right::type_id::create("pr", this);
 		pc = pwm_center::type_id::create("pc", this);
 		per = smc_period::type_id::create("per", this);
-		ps = smc_period_start::type_id::create("ps", this);
+		ps = period_start::type_id::create("ps", this);
 		cv = control_values::type_id::create("cv", this);
 		if (!uvm_config_db #(virtual smc_intf)::get(this, "", "intf", intf))
 			`uvm_fatal("SMC ENV", "Something wrong in intf config.")

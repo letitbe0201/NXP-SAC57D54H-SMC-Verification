@@ -102,28 +102,28 @@ always @(posedge QCLK) begin
 	end
 
 	count += 1;
-*/
+
 
 
 	if (count==0) begin
 		out_MNM[1] = 0; 
-		out_MNP[4] = 1;
+		out_MNP[4] = 0;
 	end
 	else if (count == 1) begin
 		out_MNM[1] = 0; 
-		out_MNP[4] = 1;	
+		out_MNP[4] = 0;	
 	end
 	else if (count == 2) begin
 		out_MNM[1] = 0; 
-		out_MNP[4] = 1;	
+		out_MNP[4] = 0;	
 	end	
 	else if (count == 3) begin
 		out_MNM[1] = 0; 
-		out_MNP[4] = 0;	
+		out_MNP[4] = 1;	
 		count = -1;
 	end	
 	count += 1;
-
+*/
 end
 
 

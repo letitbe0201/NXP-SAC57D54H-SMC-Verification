@@ -44,14 +44,16 @@ class pwm_right extends uvm_scoreboard;
 			s_time = o_msg.timestamp;
 			
 			for (int i=1; i<25; i+=1) begin
-/*				if (i==17)
-					`uvm_info("PWM R", $sformatf("%0t %0t", ep[i].per_start, prev_end[i]), UVM_LOW)
-*/
+
 				// Determine which cycle we're in for delay
 				if (ep[i].per_start > prev_end[i])
 					first_cyc[i] = 1;
 				else if (ep[i].per_start == prev_end[i])
 					first_cyc[i] = 0;
+
+/*				if (i==17)
+					`uvm_info("PWM R", $sformatf("%0t %0t", ep[i].per_start, prev_end[i]), UVM_LOW)
+*/
 
 				// DELAY shift without previous delay
 				if (first_cyc[i]) begin // CLOCK RELATED
@@ -72,17 +74,22 @@ class pwm_right extends uvm_scoreboard;
 				else begin
 					//`uvm_info("PWM R", $sformatf("%0t %0t %0t %0t", ep[i].per_start, ep[i].per_start+10*ep[i].cd, ep[i].per_start+10*(ep[i].duty+ep[i].cd), ep[i].per_end), UVM_LOW)
 					// DUTY
-					if (ep[i].per_start<=s_time && s_time<ep[i].per_start+10*ep[i].cd) begin // CLOCK RELATED
-						if (ep[i].recirc ^ s_pin[i]) begin
-							`uvm_error("PWM R", $sformatf("WRONG %s   @%0t", ep[i].p, s_time))
-						end
-					end
-					else if (ep[i].per_start+10*ep[i].cd<=s_time && s_time<ep[i].per_start+10*(ep[i].period + ep[i].cd - ep[i].duty)) begin // CLOCK RELATED
+/*					if (int'(ep[i].per_start)<=s_time && s_time<int'(ep[i].per_start+10*(ep[i].cd-ep[i].period+ep[i].duty))) begin
 						if (!(ep[i].recirc ^ s_pin[i])) begin
 							`uvm_error("PWM R", $sformatf("WRONG %s   @%0t", ep[i].p, s_time))
 						end
 					end
-					else if (ep[i].per_start+10*(ep[i].period + ep[i].cd - ep[i].duty)<=s_time && s_time<ep[i].per_end) begin //CLOCK RELATED
+					else*/ if (int'(ep[i].per_start/*+10*(ep[i].cd-ep[i].period+ep[i].duty)*/)<=s_time && s_time<int'(ep[i].per_start+10*ep[i].cd)) begin // CLOCK RELATED
+						if (ep[i].recirc ^ s_pin[i]) begin
+							`uvm_error("PWM R", $sformatf("123WRONG %s   @%0t", ep[i].p, s_time))
+						end
+					end
+					else if (int'(ep[i].per_start+10*ep[i].cd)<=s_time && s_time<int'(ep[i].per_start+10*(ep[i].period + ep[i].cd - ep[i].duty))) begin // CLOCK RELATED
+						if (!(ep[i].recirc ^ s_pin[i])) begin
+							`uvm_error("PWM R", $sformatf("WRONG %s   @%0t", ep[i].p, s_time))
+						end
+					end
+					else if (int'(ep[i].per_start+10*(ep[i].period + ep[i].cd - ep[i].duty))<=s_time && s_time<int'(ep[i].per_end)) begin //CLOCK RELATED
 						if (ep[i].recirc ^ s_pin[i]) begin
 							`uvm_error("PWM R", $sformatf("WRONG %s   @%0t", ep[i].p, s_time))
 						end
@@ -92,7 +99,7 @@ class pwm_right extends uvm_scoreboard;
 				prev_start[i] = ep[i].per_start;
 				prev_end[i] = ep[i].per_end;
 			end
-			//`uvm_info("PWM R", $sformatf("m2c0p %b  @%0t", s_pin[17], o_msg.timestamp), UVM_LOW)
+//			`uvm_info("PWM R", $sformatf("m2c0p %b  @%0t", s_pin[17], o_msg.timestamp), UVM_LOW)
 		end
 	endtask : run_phase
 endclass : pwm_right
