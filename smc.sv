@@ -44,53 +44,84 @@ always @(posedge QCLK) begin
 
 
 /*	if (count==0) begin
-		out_MNM[1] = 1; 
-		out_MNP[0] = 1;
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
 	end
 	else if (count == 1) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 1;	
+		out_MNP[4] = 0;	
 	end
 	else if (count == 2) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 1;	
+		out_MNP[4] = 0;	
 	end	
 	else if (count == 3) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 0;	
+		out_MNP[4] = 0;	
 	end	
 	else if (count == 4) begin
-		out_MNM[1] = 1; 
-		out_MNP[0] = 1;	
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;	
 	end	
 	else if (count == 5) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 1;	
+		out_MNP[4] = 0;	
 	end	
 	else if (count == 6) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 1;	
+		out_MNP[4] = 1;	
 	end	
 	else if (count == 7) begin
 		out_MNM[1] = 0; 
-		out_MNP[0] = 0;
+		out_MNP[4] = 1;
+	end
+	else if (count == 8) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
+	end
+	else if (count == 9) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
+	end
+	else if (count == 10) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
+	end
+	else if (count == 11) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
+	end
+	else if (count == 12) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
+	end
+	else if (count == 13) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;
 		count = -1;
 	end
 
 	count += 1;
 */
 
-	if (count<3) begin
-		out_MNP[4] = 0;
+
+	if (count==0) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 1;
 	end
-	else if (count == 7) begin
-		out_MNP[4] = 0;
-		count = 0;	
-	end
-	else begin
+	else if (count == 1) begin
+		out_MNM[1] = 0; 
 		out_MNP[4] = 1;	
 	end
-
+	else if (count == 2) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 1;	
+	end	
+	else if (count == 3) begin
+		out_MNM[1] = 0; 
+		out_MNP[4] = 0;	
+		count = -1;
+	end	
 	count += 1;
 
 end
