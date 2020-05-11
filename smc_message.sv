@@ -94,6 +94,29 @@ class command_msg;
 endclass : command_msg;
 
 
+// For observing DUTY
+class duty_msg;
+	// count: couter for period; per: difference between previous "rising"
+	// edges
+	int mnm_count[11:0];
+	int mnp_count[11:0];
+	int mnm_duty[11:0];
+	int mnp_duty[11:0];
+	realtime timestamp;
+
+	function new();
+		for (int i=0; i<12; i+=1) begin
+			this.mnm_count[i] = 0;
+			this.mnp_count[i] = 0;
+			this.mnm_duty[i] = 0;
+			this.mnp_duty[i] = 0;
+		end
+		this.timestamp = $realtime;
+	endfunction : new
+endclass : duty_msg
+
+
+// For observing PERIOD
 class period_msg;
 	// count: couter for period; per: difference between previous "rising"
 	// edges

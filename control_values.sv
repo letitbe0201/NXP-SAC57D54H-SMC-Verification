@@ -14,6 +14,9 @@ class control_values extends uvm_scoreboard;
 	uvm_analysis_port #(exp_pulse_msg) cv_pl_port;
 	uvm_analysis_port #(exp_pulse_msg) cv_pc_port;
 	uvm_analysis_port #(exp_pulse_msg) cv_pr_port;
+	uvm_analysis_port #(exp_pulse_msg) cv_dt_port;
+	uvm_analysis_port #(exp_pulse_msg) cv_prd_port;
+	uvm_analysis_port #(exp_pulse_msg) cv_com_port;
 
 	bit clk;
 	control_msg ct_msg[24:0];
@@ -41,6 +44,9 @@ class control_values extends uvm_scoreboard;
 		cv_pl_port = new("cv_pl_port", this);
 		cv_pc_port = new("cv_pc_port", this);
 		cv_pr_port = new("cv_pr_port", this);
+		cv_dt_port = new("cv_dt_port", this);
+		cv_prd_port = new("cv_prd_port", this);
+		cv_com_port = new("cv_com_port", this);
 		e_msg = new();
 		for (int i=0; i<25; i+=1) begin
 			ct_msg[i] = new(zero);
@@ -153,6 +159,9 @@ class control_values extends uvm_scoreboard;
 				// Allocate each pin to its verification scoreboard
 				for (int j=1; j<25; j+=1) begin
 					ep_msg = new(ct_msg[j].p, period, per_start, per_end, ct_msg[j].recirc, ct_msg[j].mo, ct_msg[j].ma, ct_msg[j].sign, ct_msg[j].duty, ct_msg[j].cd);
+					cv_prd_port.write(ep_msg);
+					cv_dt_port.write(ep_msg);
+					cv_com_port.write(ep_msg);
 					if (ct_msg[j].ma == disabled) // If MCAM = 00
 						cv_l_port.write(ep_msg);
 					else // If MCAM != DISABLED

@@ -4,25 +4,35 @@ import uvm_pkg :: *;
 
 module top();
 
-	smc_intf i();
+	smc_intf vif();
 
-	smc s(.QCLK(i.QCLK), .QRESET(i.QRESET), .QWRITE(i.QWRITE), .QSEL(i.QSEL), .QADDR(i.QADDR), .QDATAIN(i.QDATAIN), .QDATAOUT(i.QDATAOUT), .MNM(i.MNM), .MNP(i.MNP));
+        smc dut(vif.QCLK, vif.QRESET, vif.QWRITE, vif.QSEL, vif.QADDR, vif.QDATAIN, vif.QDATAOUT, vif.MNM, vif.MNP);
 
 	initial begin
-		i.QCLK = 0;
-		#5;
-		repeat (3000) begin
-			#5 i.QCLK = 1;
-			#5 i.QCLK = 0;
+		repeat (1000000000) begin
+			vif.QCLK = 1;
+			#5;
+			vif.QCLK = 0;
+			#5;
 		end
+		$display("\n\n////////////////////////////   RAN OUT OF CLOCKS /////////////////////////////////\n\n");
+		$finish;
 	end
 
 	initial begin
-		uvm_config_db #(virtual smc_intf)::set(null, "*", "intf", i);
+		vif.QRESET = 1;
+		#20
+	       	vif.QRESET = 0;
+	end
+
+	initial begin
+		uvm_config_db #(virtual smc_intf)::set(null, "*", "intf", vif);
 		run_test("smc_test");
-		#100000
-		$display("\n\nClock runs out.\n\n");
-		$finish;
+	end
+
+	initial begin
+		$dumpfile("smc.vpd");
+		$dumpvars(9,top);
 	end
 
 endmodule : top
