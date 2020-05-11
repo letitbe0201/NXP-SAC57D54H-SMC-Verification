@@ -10,6 +10,35 @@ class in_msg extends uvm_sequence_item;
 	rand bit [15:0] QDATAIN;
 	realtime timestamp;
 
+	rand logic [15:0] mcper;  // 0h
+	rand logic [7:0] mcctl1;  // 2h
+	rand logic [7:0] mcctl0;  // 3h
+	rand logic [7:0] mccc3;   // 10h
+	rand logic [7:0] mccc2;   // 11h
+	rand logic [7:0] mccc1;   // 12h
+	rand logic [7:0] mccc0;   // 13h
+	rand logic [7:0] mccc7;   // 14h
+	rand logic [7:0] mccc6;   // 15h
+	rand logic [7:0] mccc5;   // 16h
+	rand logic [7:0] mccc4;   // 17h
+	rand logic [7:0] mccc11;  // 18h
+	rand logic [7:0] mccc10;  // 19h
+	rand logic [7:0] mccc9;   // 1Ah
+	rand logic [7:0] mccc8;   // 1Bh
+	rand logic [15:0] mcdc1;  // 20h
+	rand logic [15:0] mcdc0;  // 22h
+	rand logic [15:0] mcdc3;  // 24h
+	rand logic [15:0] mcdc2;  // 26h
+	rand logic [15:0] mcdc5;  // 28h
+	rand logic [15:0] mcdc4;  // 2Ah
+	rand logic [15:0] mcdc7;  // 2Ch
+	rand logic [15:0] mcdc6;  // 2Eh
+	rand logic [15:0] mcdc9;  // 30h
+	rand logic [15:0] mcdc8;  // 32h
+	rand logic [15:0] mcdc11; // 34h
+	rand logic [15:0] mcdc10; // 36h
+	rand logic [15:0] dataout;// output register
+
 	function new(string name="in_msg");
 		super.new(name);
 	endfunction : new
