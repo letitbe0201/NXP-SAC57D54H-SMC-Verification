@@ -138,7 +138,7 @@ class period_msg;
 endclass : period_msg
 
 
-// Expected beginning and ending for the period counter
+// Expecting beginning and ending for the period counter
 class period_start_msg;
 	int period;
 	realtime per_start;
@@ -159,6 +159,7 @@ endclass : period_start_msg
 typedef enum {zero, m0c0m, m0c1m, m1c0m, m1c1m, m2c0m, m2c1m, m3c0m, m3c1m, m4c0m, m4c1m, m5c0m, m5c1m, m0c0p, m0c1p, m1c0p, m1c1p, m2c0p, m2c1p, m3c0p, m3c1p, m4c0p, m4c1p, m5c0p, m5c1p } pin;
 typedef enum {half_b_m, half_b_p, full_b, dualfull_b} mcom;
 typedef enum {disabled, left, right, center} mcam;
+// PWM control parameters
 class control_msg;
 	pin p;
 	logic recirc;
@@ -195,6 +196,7 @@ class exp_val_msg;
 	endfunction : new
 endclass : exp_val_msg
 
+// Expecting PWM reference
 class exp_pulse_msg;
 	pin p;
 	int period;

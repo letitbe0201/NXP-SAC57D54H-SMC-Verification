@@ -1,0 +1,84 @@
+NXP SAC57D54H SMC Module Verification
+
+
+Boxes:
+
+1. smc_edgedet.sv
+IN: out_msg
+OUT: rf_msg
+This box takes the observing values of every pins from the output monitor, determines whether it is at RISING/FALLING/STAY state, and pacakage them as a rf_msg.
+
+2. smc_period.sv
+IN: rf_msg, exp_pulse_msg
+OUT: period_msg
+This box takes the observing rising/falling message from edgedet, calculates the observing period of each pin, and send them to the comparison box.
+
+3. smc_duty.sv
+IN: rf_msg, exp_pulse_msg
+OUT: duty_msg
+This box takes the observing rising/falling message from edgedet, calculates the observing duty of each pin, and send them to the comparison box.
+
+4. smc_pinval.sv
+IN: out_msg
+OUT: obs_val_msg
+This box takes the observing values of every pins from the output monitor, and packages all the numbers into one observing value message.
+
+5. period_start.sv
+IN: in_msg
+OUT: period_start_msg
+This box monitors the input period value, and sends a message out whenever a new PERIOD starts counting.
+
+6. commanddet.sv
+IN: in_msg
+OUT: command_msg
+This box takes input from the INPUT MONITOR, and send a message out for reference whenever we get a new input command.
+
+7. clk_control.sv
+IN: in_msg, command_msg
+OUT: bit
+This box takes the MCCTL0 MCPRE command from commanddet, and sends a clock bit out to control the prescalar value.
+
+8. control_col.sv
+IN: bit, command_msg
+OUT: control_msg
+This box takes the PWM control values of every pins (MCOM, MCAM, CD, SIGN, DUTY), packages them as a control message on every clock count from clk_control.
+
+9. control_values.sv
+IN: bit, period_start_msg, control_msg
+OUT: exp_val_msg, exp_pulse_msg
+This box collects all the parameters needed for generating PWMs (from control_col) on every period counter = 0 (from period_start), and sends them to corresponding scoreboards.
+
+10. off_det.sv
+IN: obs_val_msg, exp_val_msg
+OUT: NONE
+This box verifies the OFF-STATE of the input (PER = 0). It compares the input value with the observing value from smc_pinval.
+
+11. low_det.sv
+IN: obs_val_msg, exp_pulse_msg
+OUT: NONE
+This box verifies the LOGIC-LOW state of the input. It compares the input value with the observing value from smc_pinval.
+
+12. high_det.sv
+IN: obs_val_msg, exp_pulse_msg
+OUT: NONE
+This box verifies the LOGIC-HIGH state of the input. It compares the input value with the observing value from smc_pinval.
+
+13. pwm_left.sv
+IN: obs_val_msg, exp_pulse_msg
+OUT: NONE
+This box verifies the pin which is at LEFT alignment. It takes the PWM control values from control_values and compares the predicting model with the observing value. An error message will be posted whenever a mismatch happens.
+
+14. pwm_right.sv
+IN: obs_val_msg, exp_pulse_msg
+OUT: NONE
+This box verifies the pin which is at RIGHT alignment. It takes the PWM control values from control_values and compares the predicting model with the observing value. An error message will be posted whenever a mismatch happens.
+
+15. pwm_center.sv
+IN: obs_val_msg, exp_pulse_msg
+OUT: NONE
+This box verifies the pin which is at CENTER alignment. It takes the PWM control values from control_values and compares the predicting model with the observing value. An error message will be posted whenever a mismatch happens.
+
+16. per_d_comparison.sv
+IN: duty_msg, period_msg, exp_pulse_msg
+OUT: NONE
+This box compares the observing DUTY/PERIOD calculated from smc_duty and smc_period with the expecting DUTY/PERIOD we get from exp_pulse_msg. It generates an error message when a mismatch happens.

@@ -1,0 +1,6 @@
+NXP SAC57D54H SMC Module Verification
+
+
+Sequences:
+
+Initially, the test set a RESET signal to set all the registers to 0. In sequence item, the test makes memory for all the internal registers. The sequence randomizes the value for those registers and sends them to the driver through the sequencer. At every positive edge of clock, the driver sends the ADDRESS and DATAIN value to the DUT, respectively. Then, the address is incremented to the next valid address. Once all the data is set in the DUT, the driver turns WRITE signal to low and keeps SEL signal as high. Then, all the address are again fed into the DUT at every clock cycle to get values on DATAOUT.
